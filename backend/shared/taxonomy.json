@@ -1,0 +1,79 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "description": "Genetic Narrative Alleles for deterministic media recommendation.",
+    "scale": "1 (Minimum) to 5 (Maximum)"
+  },
+  "alleles": [
+    {
+      "id": "d1",
+      "name": "System Rigidity",
+      "definition": "The degree to which the world follows immutable, internally consistent rules.",
+      "endpoint_1": "Soft/Arbitrary: Rules change to fit the plot; outcomes are determined by 'destiny' or luck.",
+      "endpoint_5": "Hard/Rigid: Rules are established early and never broken; characters must find logical solutions within constraints."
+    },
+    {
+      "id": "d2",
+      "name": "Information Transparency",
+      "definition": "How explicitly the 'System Manual' or underlying mechanics are explained to the user.",
+      "endpoint_1": "Obscure: Mechanics are mysterious or hidden; focus is on the 'what' rather than the 'how'.",
+      "endpoint_5": "Technical/Explicit: High documentation; the audience understands the exact variables of the conflict (The Explanation)."
+    },
+    {
+      "id": "d3",
+      "name": "Causality Integrity",
+      "definition": "The absence of external code injection or plot armor to resolve conflicts.",
+      "endpoint_1": "Deus Ex Machina: Major problems are solved by sudden outside forces or unearned power-ups (Glitches).",
+      "endpoint_5": "Logic-Driven: Outcomes are the direct, unavoidable result of prior setup and character agency."
+    },
+    {
+      "id": "d4",
+      "name": "Strategic Intent",
+      "definition": "The protagonist's approach to the system.",
+      "endpoint_1": "Reactive/Prey: The character is a victim of circumstances, hiding or merely surviving.",
+      "endpoint_5": "Proactive/Predator: The character actively analyzes, manipulates, or optimizes the system to their advantage."
+    },
+    {
+      "id": "d5",
+      "name": "Deception Density",
+      "definition": "The presence of social engineering, information asymmetry, and layered schemes.",
+      "endpoint_1": "Transparent: Characters say what they mean; conflicts are face-to-face and honest.",
+      "endpoint_5": "Layered: Extensive use of predator deception, double-blinds, and hidden agendas."
+    },
+    {
+      "id": "d6",
+      "name": "Social Stakes",
+      "definition": "The scale of the system affected by the narrative's resolution.",
+      "endpoint_1": "Personal: The outcome only affects the immediate emotional state or life of the protagonist.",
+      "endpoint_5": "Systemic: The outcome alters the architecture of the world, government, or universal parameters."
+    },
+    {
+      "id": "d7",
+      "name": "Narrative Density",
+      "definition": "The ratio of information/plot progression to runtime/page count.",
+      "endpoint_1": "The Stall: Frequent use of flashbacks, repetitive internal monologues, or 'filler' to extend length.",
+      "endpoint_5": "The Explanation: High-velocity information delivery; every scene contributes to system-building or plot progression."
+    },
+    {
+      "id": "d8",
+      "name": "Linearity",
+      "definition": "The direction of system evolution.",
+      "endpoint_1": "Status Quo/Loop: The world returns to its starting state after every arc; characters don't truly evolve.",
+      "endpoint_5": "Progressive Evolution: The world and characters are fundamentally changed; there is no 'reset' button."
+    },
+    {
+      "id": "d9",
+      "name": "Awe Factor",
+      "definition": "The feeling of 'Sense of Wonder' elicited by the scale or ingenuity of the system.",
+      "endpoint_1": "Mundane: Focuses on everyday occurrences or grounded, familiar settings without discovery.",
+      "endpoint_5": "Wonder: Evokes awe through the discovery of vast systems, ancient architectures, or novel logic."
+    },
+    {
+      "id": "d10",
+      "name": "Tone Stability",
+      "definition": "The overall outlook of the world-system.",
+      "endpoint_1": "Misery Porn: Focuses on unearned suffering, hopelessness, and the degradation of the character (Red Zone).",
+      "endpoint_5": "Constructive: Focuses on growth, optimization, and the success of logical effort (Green Zone)."
+    }
+  ]
+}
