@@ -8,6 +8,7 @@ import statistics
 
 VECTOR_LENGTH = 10
 EPSILON = 1e-6
+WEIGHT_FLOOR = 0.1
 
 
 def main():
@@ -39,7 +40,7 @@ def main():
     for i in range(VECTOR_LENGTH):
         column = [vec[i] for vec in vectors]
         sigma = statistics.pstdev(column)
-        weights.append(1.0 / (sigma + EPSILON))
+        weights.append(max(1.0 / (sigma + EPSILON), WEIGHT_FLOOR)) # makes sure to not delete low weight alleles by adding wieght floor
 
     # Step 5 — output
     print(json.dumps({"avg_vector": avg_vector, "weights": weights}))
