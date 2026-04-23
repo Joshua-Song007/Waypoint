@@ -5,6 +5,7 @@
 */
 package com.system.storage;
 
+import com.system.models.HistoryEntry;
 import com.system.models.MediaTitle;
 import com.system.models.MediaTitle.MediaType;
 import com.system.models.MediaVector;
@@ -22,42 +23,43 @@ public class CsvDataManager {
     private static final String HISTORY_PATH  = "../../data/cache/user_history.csv";
 
     private static final String LIBRARY_HEADER = "id,title,type,source,d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,tagged_at";
-    private static final String HISTORY_HEADER  = "id,title,type,rating,consumed_at,d1,d2,d3,d4,d5,d6,d7,d8,d9,d10";
+    private static final String HISTORY_HEADER  = "UserID,TitleID,UserRating,Timestamp";
 
-    // --- Public API ---
+    private static final String USER_ID = "user1"; // single-user prototype
+
+    // --- Library channel ---
 
     public List<MediaTitle> loadLibrary() throws IOException {
-        return loadCsv(LIBRARY_PATH, false);
-    }
-
-    public List<MediaTitle> loadUserHistory() throws IOException {
-        return loadCsv(HISTORY_PATH, true);
+        List<MediaTitle> results = new ArrayList<>();
+        File file = new File(LIBRARY_PATH);
+        if (!file.exists()) return results;
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            reader.readLine(); // skip header
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+                results.add(toTitle(line.split(",")));
+            }
+        }
+        return results;
     }
 
     public void appendToLibrary(MediaTitle title) throws IOException {
         appendRow(LIBRARY_PATH, LIBRARY_HEADER, String.join(",", toRow(title)));
     }
 
-    public void appendToHistory(MediaTitle title, float rating) throws IOException {
-        appendRow(HISTORY_PATH, HISTORY_HEADER, String.join(",", toHistoryRow(title, rating)));
-    }
-
-    // --- CSV parsing ---
-
-    // global-library.csv: id,title,type,source,d1..d10,tagged_at  → vecOffset=4
-    // user_history.csv:   id,title,type,rating,consumed_at,d1..d10 → vecOffset=5
-    private MediaTitle toTitle(String[] row, boolean isHistory) {
-        int o = isHistory ? 5 : 4;
+    // global-library.csv: id,title,type,source,d1..d10,tagged_at → vecOffset=4
+    private MediaTitle toTitle(String[] row) {
         return new MediaTitle(
             row[0].trim(),
             row[1].trim(),
             MediaType.valueOf(row[2].trim()),
             new MediaVector(
-                Float.parseFloat(row[o].trim()),   Float.parseFloat(row[o+1].trim()),
-                Float.parseFloat(row[o+2].trim()), Float.parseFloat(row[o+3].trim()),
-                Float.parseFloat(row[o+4].trim()), Float.parseFloat(row[o+5].trim()),
-                Float.parseFloat(row[o+6].trim()), Float.parseFloat(row[o+7].trim()),
-                Float.parseFloat(row[o+8].trim()), Float.parseFloat(row[o+9].trim())
+                Float.parseFloat(row[4].trim()),  Float.parseFloat(row[5].trim()),
+                Float.parseFloat(row[6].trim()),  Float.parseFloat(row[7].trim()),
+                Float.parseFloat(row[8].trim()),  Float.parseFloat(row[9].trim()),
+                Float.parseFloat(row[10].trim()), Float.parseFloat(row[11].trim()),
+                Float.parseFloat(row[12].trim()), Float.parseFloat(row[13].trim())
             )
         );
     }
@@ -72,31 +74,41 @@ public class CsvDataManager {
         };
     }
 
-    private String[] toHistoryRow(MediaTitle t, float rating) {
-        float[] v = t.vector.toArray();
-        return new String[]{
-            t.id, t.title, t.mediaType.name(), fmt(rating), LocalDateTime.now().toString(),
-            fmt(v[0]), fmt(v[1]), fmt(v[2]), fmt(v[3]), fmt(v[4]),
-            fmt(v[5]), fmt(v[6]), fmt(v[7]), fmt(v[8]), fmt(v[9])
-        };
-    }
+    // --- History channel ---
 
-    // --- I/O ---
-
-    private List<MediaTitle> loadCsv(String path, boolean isHistory) throws IOException {
-        List<MediaTitle> results = new ArrayList<>();
-        File file = new File(path);
+    public List<HistoryEntry> loadUserHistory() throws IOException {
+        List<HistoryEntry> results = new ArrayList<>();
+        File file = new File(HISTORY_PATH);
         if (!file.exists()) return results;
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             reader.readLine(); // skip header
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
-                results.add(toTitle(line.split(","), isHistory));
+                results.add(toHistoryEntry(line.split(",")));
             }
         }
         return results;
     }
+
+    public void appendToHistory(String titleId, float rating) throws IOException {
+        appendRow(HISTORY_PATH, HISTORY_HEADER, String.join(",", toHistoryRow(titleId, rating)));
+    }
+
+    // user_history.csv: UserID,TitleID,UserRating,Timestamp
+    private HistoryEntry toHistoryEntry(String[] row) {
+        return new HistoryEntry(
+            row[1].trim(),
+            row[3].trim(),
+            Float.parseFloat(row[2].trim())
+        );
+    }
+
+    private String[] toHistoryRow(String titleId, float rating) {
+        return new String[]{ USER_ID, titleId, fmt(rating), LocalDateTime.now().toString() };
+    }
+
+    // --- Shared I/O ---
 
     private void appendRow(String path, String header, String row) throws IOException {
         File file = new File(path);
